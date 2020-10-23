@@ -6,7 +6,7 @@
   "scripts": {
     "debug": "nodemon index.ts",
     "start": "node index.js",
-    "test": "mocha --require ts-node/register --watch-extensions ts tests/**/*.test.ts"
+    "test": "mocha --require ts-node/register --watch-extensions ts **/*.test.ts"
   },
   "repository": {
     "type": "git",
@@ -24,12 +24,16 @@
     "chai": "^4.2.0",
     "express": "^4.17.1",
     "mocha": "^8.2.0",
+    "mongodb": "^3.6.2",
+    "password-hash": "^1.2.2",
     "supertest": "^5.0.0",
     "typescript": "^4.0.3"
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
+    "@types/mongodb": "^3.5.31",
     "@types/node": "^14.14.2",
+    "@types/password-hash": "^1.2.20",
     "@types/supertest": "^2.0.10",
     "ts-node": "^9.0.0"
   }
