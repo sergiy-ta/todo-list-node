@@ -3,7 +3,7 @@ import { expect } from 'chai';
 // database
 import database from '../../database/database';
 
-describe('Test database user', () => {
+describe('Test database', () => {
 
     it('mongodb url', async () => {
         expect(database.mongodbUrl).to.be.a('string');

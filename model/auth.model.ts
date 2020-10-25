@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import { ObjectID } from 'mongodb';
 import { secretKeyAuthToken } from '../const';
 
 interface VerifyTokenCallback {
