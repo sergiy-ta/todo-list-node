@@ -39,4 +39,24 @@ export class TaskDatabase implements TaskClass {
 
         return promise;
     }
+
+    public getList(user: User): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) }
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+                
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
 }

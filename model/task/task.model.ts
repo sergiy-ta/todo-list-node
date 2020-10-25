@@ -16,4 +16,9 @@ export class TaskModel implements TaskClass {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.create(name, description, user);
     }
+
+    public async getList(user: User): Promise<Task[]> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.getList(user);
+    }
 }
