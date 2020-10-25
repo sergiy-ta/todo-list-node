@@ -27,7 +27,8 @@ describe("index route works /api/user", () => {
         request(app)
             .post("/api/user")
             .send({ last_name: "last_name", first_name: "first_name", email: "email@gmail.com", password: "password" })
-            .expect(200, 'true')
+            .expect("Authorization")
+            .expect(200)
             .end((err: any, res: any) => {
                 if (err) throw err;
             });

@@ -17,8 +17,8 @@ export class UserDatabase implements UserClass {
         return await MongoClient.connect(database.mongodbUrl, { useNewUrlParser: true });
     }
 
-    public create(last_name: string, first_name: string, email: string, password: string): Promise<User> {
-        let promise = new Promise<User>((resolve, rejects) => {
+    public create(last_name: string, first_name: string, email: string, password: string): Promise<User | null> {
+        let promise = new Promise<User | null>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbUsers).collection(this.collection).insertOne({
                     last_name: last_name,
@@ -28,6 +28,44 @@ export class UserDatabase implements UserClass {
                     date_of_creation: new Date(new Date().toISOString())
                 }, (error: any, data: any) => {
                     if (!error) resolve(data['ops'][0] ?? null);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public get(id: string): Promise<User | null> {
+        let promise = new Promise<User | null>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbUsers).collection(this.collection).findOne({
+                    _id: new ObjectID(id)
+                }, (error: any, user: any) => {
+                    if (!error) resolve(user ?? null);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public getEmail(email: string): Promise<User | null> {
+        let promise = new Promise<User>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbUsers).collection(this.collection).findOne({
+                    email: email
+                }, (error: any, user: any) => {
+                    if (!error) resolve(user ?? null);
                     else console.error(error);
                 });
 
