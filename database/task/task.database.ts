@@ -25,6 +25,7 @@ export class TaskDatabase implements TaskClass {
                     name: name,
                     description: description,
                     execution_date_time: new Date(execution_date_time),
+                    is_complete: false,
                     user: { _id: new ObjectID(user._id) },
                     date_of_creation: new Date(new Date().toISOString())
                 }, (error: any, data: any) => {
@@ -51,6 +52,69 @@ export class TaskDatabase implements TaskClass {
                     else console.error(error);
                 });
                 
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public getIsCompleteList(user: User): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    is_complete: true
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public getIsNotCompleteList(user: User): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    is_complete: false
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public complete(id: string): Promise<boolean> {
+        let promise = new Promise<boolean>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).updateOne({ _id: new ObjectID(id) }, {
+                    '$set': {
+                        is_complete: true
+                    }
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ? true : false);
+                    else console.error(error);
+                });
 
                 client.close();
             }).catch(error => {

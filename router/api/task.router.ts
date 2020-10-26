@@ -57,7 +57,7 @@ user_api.get('/api/task/today/list', async (req: express.Request, res: express.R
                     let user: User | null = await userModel.get(authData.id);
 
                     if (user) {
-                        task_list = await taskModel.getListToday(user);
+                        task_list = await taskModel.getIsNotCompleteListToday(user);
                     }
                 }
 
@@ -88,11 +88,33 @@ user_api.get('/api/task/:project/list', async (req: express.Request, res: expres
                     let user: User | null = await userModel.get(authData.id);
 
                     if (user) {
-                        task_list = await taskModel.getList(user);
+                        task_list = await taskModel.getIsNotCompleteList(user);
                     }
                 }
 
                 res.status(200).send(task_list);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
+user_api.get('/api/task/:id/complete', async (req: express.Request, res: express.Response) => {
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.params.id;
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let taskModel: TaskModel = new TaskModel();
+                res.status(200).send(taskModel.complete(id));
             } else {
                 res.sendStatus(401);
             }
