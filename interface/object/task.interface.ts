@@ -5,6 +5,7 @@ export declare interface Task {
     _id: ObjectID,
     name: string;
     description: string;
+    execution_date_time: Date;
     user: User | {
         _id: string | ObjectID;
     }

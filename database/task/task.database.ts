@@ -18,12 +18,13 @@ export class TaskDatabase implements TaskClass {
         return await MongoClient.connect(database.mongodbUrl, { useNewUrlParser: true });
     }
 
-    public create(name: string, description: string, user: User | { _id: string }): Promise<Task | null> {
+    public create(name: string, description: string, execution_date_time: string, user: User | { _id: string }): Promise<Task | null> {
         let promise = new Promise<Task | null>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).insertOne({
                     name: name,
                     description: description,
+                    execution_date_time: new Date(execution_date_time),
                     user: { _id: new ObjectID(user._id) },
                     date_of_creation: new Date(new Date().toISOString())
                 }, (error: any, data: any) => {

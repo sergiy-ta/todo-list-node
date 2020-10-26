@@ -12,9 +12,9 @@ export class TaskModel implements TaskClass {
         this.collection = collection;
     }
 
-    public async create(name: string, description: string, user: User | { _id: string}): Promise<Task | null> {
+    public async create(name: string, description: string, execution_date_time: string, user: User | { _id: string}): Promise<Task | null> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
-        return await taskDatabase.create(name, description, user);
+        return await taskDatabase.create(name, description, execution_date_time, user);
     }
 
     public async getList(user: User): Promise<Task[]> {
