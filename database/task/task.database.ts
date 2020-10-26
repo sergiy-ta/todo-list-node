@@ -69,7 +69,7 @@ export class TaskDatabase implements TaskClass {
                     user: { _id: new ObjectID(user._id.toHexString()) },
                     is_complete: true
                 }).toArray((error: any, data: any) => {
-                    if (!error) resolve(data ?? null);
+                    if (!error) resolve(data ?? []);
                     else console.error(error);
                 });
 
