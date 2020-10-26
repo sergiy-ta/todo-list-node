@@ -21,4 +21,14 @@ export class TaskModel implements TaskClass {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.getList(user);
     }
+
+    public async getListToday(user: User): Promise<Task[]> {
+        let task_list: Task[] = []
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        (await taskDatabase.getList(user)).map((task: Task) => {
+            let data_now = new Date(Date.now());
+            if (task.execution_date_time.getDate() === data_now.getDate() && task.execution_date_time.getMonth() === data_now.getMonth() && task.execution_date_time.getFullYear() === data_now.getFullYear()) task_list.push(task);
+        });
+        return await task_list;
+    }
 }

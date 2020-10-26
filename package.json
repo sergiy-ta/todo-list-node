@@ -4,7 +4,7 @@
   "description": "Todo list app",
   "main": "index.js",
   "scripts": {
-    "debug": "nodemon cluster.ts",
+    "debug": "nodemon index.ts",
     "start": "node cluster.js",
     "test": "mocha --require ts-node/register --watch-extensions ts **/*.test.ts"
   },
