@@ -17,5 +17,5 @@ if (cluster.isMaster) {
 }
 
 if (cluster.isWorker) {
-    require('./index.ts');
+    require('./index.js');
 }

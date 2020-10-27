@@ -6,7 +6,8 @@
   "scripts": {
     "debug": "nodemon index.ts",
     "start": "node cluster.js",
-    "test": "mocha --require ts-node/register --watch-extensions ts **/*.test.ts"
+    "test": "mocha --require ts-node/register --watch-extensions ts **/*.test.ts",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
