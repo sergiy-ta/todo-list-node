@@ -8,6 +8,7 @@ export declare interface Task {
     description: string;
     execution_date_time: Date;
     project: Project | { _id: string },
+    tag_list: string[],
     is_complete: string;
     user: User | {
         _id: string | ObjectID;

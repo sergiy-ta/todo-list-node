@@ -19,6 +19,7 @@ user_api.post('/api/task', jsonParser, async (req: express.Request, res: express
     let description: string = req.body.description;
     let execution_date_time: string = req.body.execution_date_time;
     let project: string = req.body.project;
+    let tag_list: string[] = req.body.tag_list;
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -28,7 +29,7 @@ user_api.post('/api/task', jsonParser, async (req: express.Request, res: express
             if (access) {
                 let task: Task | null = null;
                 let taskModel: TaskModel = new TaskModel();
-                if (authData) task = await taskModel.create(name, description, execution_date_time, { _id: authData?.id }, project);
+                if (authData) task = await taskModel.create(name, description, execution_date_time, { _id: authData?.id }, tag_list, project);
 
                 res.status(200).send(task ? true : false);
             } else {
