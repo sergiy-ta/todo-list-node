@@ -42,6 +42,70 @@ user_api.post('/api/task', jsonParser, async (req: express.Request, res: express
     
 });
 
+user_api.put('/api/task', jsonParser, async (req: express.Request, res: express.Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.body._id.toString();
+    let name: string = req.body.name;
+    let description: string = req.body.description;
+    let execution_date_time: string = req.body.execution_date_time;
+    let project: string = req.body.project;
+    let tag_list: string[] = req.body.tag_list;
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let is_update: boolean = false;
+                let taskModel: TaskModel = new TaskModel();
+                if (authData) is_update = await taskModel.edit(id, name, description, execution_date_time, tag_list, project);
+
+                res.status(200).send(is_update);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
+});
+
+
+user_api.get('/api/task/:id', jsonParser, async (req: express.Request, res: express.Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.params.id;
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let task: Task | null = null;
+                let taskModel: TaskModel = new TaskModel();
+                if (authData) task = await taskModel.get(id);
+
+                res.status(200).send(task);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
+});
+
+
+
 user_api.get('/api/task/today/list', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 

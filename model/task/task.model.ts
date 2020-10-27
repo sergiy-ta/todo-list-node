@@ -17,6 +17,11 @@ export class TaskModel implements TaskClass {
         return await taskDatabase.create(name, description, execution_date_time, user, tag_list, project);
     }
 
+    public async get(id: string): Promise<Task | null> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.get(id);
+    }
+
     public async getList(user: User): Promise<Task[]> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.getList(user);
@@ -80,5 +85,10 @@ export class TaskModel implements TaskClass {
     public async complete(id: string): Promise<boolean> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.complete(id);
+    }
+
+    public async edit(id: string, name: string, description: string, execution_date_time: string, tag_list: string[], project: string): Promise<boolean> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.edit(id, name, description, execution_date_time, tag_list, project);
     }
 }

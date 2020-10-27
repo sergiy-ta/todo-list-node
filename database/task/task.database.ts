@@ -44,6 +44,25 @@ export class TaskDatabase implements TaskClass {
         return promise;
     }
 
+    public get(id: string): Promise<Task | null> {
+        let promise = new Promise<Task | null>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).findOne({ 
+                    _id: new ObjectID(id) 
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
     public getList(user: User): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
@@ -177,6 +196,31 @@ export class TaskDatabase implements TaskClass {
                 client.db(database.dbTasks).collection(this.collection).updateOne({ _id: new ObjectID(id) }, {
                     '$set': {
                         is_complete: true
+                    }
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ? true : false);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public edit(id: string, name: string, description: string, execution_date_time: string, tag_list: string[], project: string): Promise<boolean> {
+        let promise = new Promise<boolean>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).updateOne({ _id: new ObjectID(id) }, {
+                    '$set': {
+                        name: name,
+                        description: description,
+                        execution_date_time: new Date(execution_date_time),
+                        project: { _id: project },
+                        tag_list: tag_list
                     }
                 }, (error: any, data: any) => {
                     if (!error) resolve(data ? true : false);
