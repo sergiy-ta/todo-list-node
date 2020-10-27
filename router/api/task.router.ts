@@ -104,6 +104,34 @@ user_api.get('/api/task/:id', jsonParser, async (req: express.Request, res: expr
 
 });
 
+user_api.delete('/api/task/:id', jsonParser, async (req: express.Request, res: express.Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.params.id;
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let is_delete: boolean = false;
+                let taskModel: TaskModel = new TaskModel();
+                if (authData) is_delete = await taskModel.delete(id);
+
+                res.status(200).send(is_delete);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
+});
+
 
 
 user_api.get('/api/task/today/list', async (req: express.Request, res: express.Response) => {

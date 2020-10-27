@@ -91,4 +91,9 @@ export class TaskModel implements TaskClass {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.edit(id, name, description, execution_date_time, tag_list, project);
     }
+
+    public async delete(id: string): Promise<boolean> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.delete(id);
+    }
 }
