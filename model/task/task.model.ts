@@ -12,14 +12,19 @@ export class TaskModel implements TaskClass {
         this.collection = collection;
     }
 
-    public async create(name: string, description: string, execution_date_time: string, user: User | { _id: string}): Promise<Task | null> {
+    public async create(name: string, description: string, execution_date_time: string, user: User | { _id: string}, project: string = 'inbox'): Promise<Task | null> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
-        return await taskDatabase.create(name, description, execution_date_time, user);
+        return await taskDatabase.create(name, description, execution_date_time, user, project);
     }
 
     public async getList(user: User): Promise<Task[]> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.getList(user);
+    }
+
+    public async getProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.getProjectList(user, project);
     }
 
     public async getListToday(user: User): Promise<Task[]> {
@@ -37,6 +42,11 @@ export class TaskModel implements TaskClass {
         return await taskDatabase.getIsCompleteList(user);
     }
 
+    public async getIsCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.getIsCompleteProjectList(user, project);
+    }
+
     public async getIsCompleteListToday(user: User): Promise<Task[]> {
         let task_list: Task[] = []
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
@@ -50,6 +60,11 @@ export class TaskModel implements TaskClass {
     public async getIsNotCompleteList(user: User): Promise<Task[]> {
         let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
         return await taskDatabase.getIsNotCompleteList(user);
+    }
+
+    public async getIsNotCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let taskDatabase: TaskDatabase = new TaskDatabase(this.collection);
+        return await taskDatabase.getIsNotCompleteProjectList(user, project);
     }
 
     public async getIsNotCompleteListToday(user: User): Promise<Task[]> {

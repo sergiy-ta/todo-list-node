@@ -18,13 +18,14 @@ export class TaskDatabase implements TaskClass {
         return await MongoClient.connect(database.mongodbUrl, { useNewUrlParser: true });
     }
 
-    public create(name: string, description: string, execution_date_time: string, user: User | { _id: string }): Promise<Task | null> {
+    public create(name: string, description: string, execution_date_time: string, user: User | { _id: string }, project: string = 'inbox'): Promise<Task | null> {
         let promise = new Promise<Task | null>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).insertOne({
                     name: name,
                     description: description,
                     execution_date_time: new Date(execution_date_time),
+                    project: project,
                     is_complete: false,
                     user: { _id: new ObjectID(user._id) },
                     date_of_creation: new Date(new Date().toISOString())
@@ -48,10 +49,31 @@ export class TaskDatabase implements TaskClass {
                 client.db(database.dbTasks).collection(this.collection).find({
                     user: { _id: new ObjectID(user._id.toHexString()) }
                 }).toArray((error: any, data: any) => {
-                    if (!error) resolve(data ?? null);
+                    if (!error) resolve(data ?? []);
                     else console.error(error);
                 });
                 
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public getProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    project: project
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? []);
+                    else console.error(error);
+                });
+
 
                 client.close();
             }).catch(error => {
@@ -83,12 +105,56 @@ export class TaskDatabase implements TaskClass {
         return promise;
     }
 
+    public getIsCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    is_complete: true,
+                    project: project
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? []);
+                    else console.error(error);
+                });
+
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
     public getIsNotCompleteList(user: User): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
                     user: { _id: new ObjectID(user._id.toHexString()) },
                     is_complete: false
+                }).toArray((error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
+    public getIsNotCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+        let promise = new Promise<Task[]>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).find({
+                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    is_complete: false,
+                    project: project
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? null);
                     else console.error(error);
