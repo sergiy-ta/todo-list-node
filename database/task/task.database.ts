@@ -25,7 +25,7 @@ export class TaskDatabase implements TaskClass {
                     name: name,
                     description: description,
                     execution_date_time: new Date(execution_date_time),
-                    project: project,
+                    project: { _id: project },
                     is_complete: false,
                     user: { _id: new ObjectID(user._id) },
                     date_of_creation: new Date(new Date().toISOString())
@@ -68,7 +68,7 @@ export class TaskDatabase implements TaskClass {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
                     user: { _id: new ObjectID(user._id.toHexString()) },
-                    project: project
+                    project: { _id: project }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
                     else console.error(error);
@@ -111,7 +111,7 @@ export class TaskDatabase implements TaskClass {
                 client.db(database.dbTasks).collection(this.collection).find({
                     user: { _id: new ObjectID(user._id.toHexString()) },
                     is_complete: true,
-                    project: project
+                    project: { _id: project }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
                     else console.error(error);
@@ -154,7 +154,7 @@ export class TaskDatabase implements TaskClass {
                 client.db(database.dbTasks).collection(this.collection).find({
                     user: { _id: new ObjectID(user._id.toHexString()) },
                     is_complete: false,
-                    project: project
+                    project: { _id: project }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? null);
                     else console.error(error);
