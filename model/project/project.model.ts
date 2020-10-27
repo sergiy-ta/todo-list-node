@@ -17,6 +17,11 @@ export class ProjectModel implements ProjectClass {
         return await projectDatabase.create(name, user);
     }
 
+    public async get(id: string): Promise<Project | null> {
+        let projectDatabase: ProjectDatabase = new ProjectDatabase(this.collection);
+        return await projectDatabase.get(id);
+    }
+
     public async getList(user: User): Promise<Project[]> {
         let projectDatabase: ProjectDatabase = new ProjectDatabase(this.collection);
         return await projectDatabase.getList(user);

@@ -71,7 +71,7 @@ user_api.get('/api/task/today/list', async (req: express.Request, res: express.R
     }
 });
 
-user_api.get('/api/task/:project/list', async (req: express.Request, res: express.Response) => {
+user_api.get('/api/task/:id/list', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
     let authModel: AuthModel = new AuthModel();

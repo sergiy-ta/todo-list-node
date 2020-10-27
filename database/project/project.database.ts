@@ -39,6 +39,25 @@ export class ProjectDatabase implements ProjectClass {
         return promise;
     }
 
+    public get(id: string): Promise<Project | null> {
+        let promise = new Promise<Project | null>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbProjects).collection(this.collection).findOne({
+                    _id: new ObjectID(id)
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ?? null);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
+
     public getList(user: User): Promise<Project[]> {
         let promise = new Promise<Project[]>((resolve, rejects) => {
             this.connect().then(client => {

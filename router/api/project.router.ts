@@ -69,4 +69,28 @@ project_api.get('/api/project/list', async (req: express.Request, res: express.R
     }
 });
 
+project_api.get('/api/project/:id', async (req: express.Request, res: express.Response) => {
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.params.id;
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let taskModel: ProjectModel = new ProjectModel();
+                let project: Project | null = await taskModel.get(id);
+
+                res.status(200).send(project);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+});
+
 export default project_api;
