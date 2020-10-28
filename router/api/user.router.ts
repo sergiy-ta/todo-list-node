@@ -11,10 +11,10 @@ const jsonParser = express.json();
 user_api.post('/api/user', jsonParser, async (req: express.Request, res: express.Response) => {
     if (!req.body) return res.sendStatus(400);
 
-    let last_name: string = req.body.last_name;
-    let first_name: string = req.body.first_name;
-    let email: string = req.body.email;
-    let password: string = req.body.password;
+    let last_name: string = req.body.last_name.trim();
+    let first_name: string = req.body.first_name.trim();
+    let email: string = req.body.email.trim();
+    let password: string = req.body.password.trim();
 
     if (last_name && first_name && email && password) {
         let userModel: UserModel = new UserModel();
@@ -26,10 +26,10 @@ user_api.post('/api/user', jsonParser, async (req: express.Request, res: express
 
             res.status(200).send({token});
         } else {
-            res.status(200).send('');
+            res.status(401).send('');
         }
     } else {
-        res.status(200).send('');
+        res.status(401).send('');
     }
 });
 

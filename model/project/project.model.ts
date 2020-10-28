@@ -25,4 +25,8 @@ export class ProjectModel implements ProjectClass {
     public async getList(user: User): Promise<Project[]> {
         return await this.projectDatabase.getList(user);
     }
+
+    public async edit(id: string, name: string): Promise<boolean> {
+        return await this.projectDatabase.edit(id, name);
+    }
 }

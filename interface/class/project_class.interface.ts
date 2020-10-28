@@ -7,4 +7,6 @@ export interface ProjectClass {
     get(id: string): Promise<Project | null>;
 
     getList(user: User): Promise<Project[]>;
+
+    edit(id: string, name: string): Promise<boolean>;
 }

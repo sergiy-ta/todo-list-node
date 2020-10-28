@@ -15,7 +15,7 @@ project_api.post('/api/project', jsonParser, async (req: express.Request, res: e
 
     let token: string | undefined = req.headers.authorization;
 
-    let name: string = req.body.name;
+    let name: string = req.body.name.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -28,6 +28,35 @@ project_api.post('/api/project', jsonParser, async (req: express.Request, res: e
                 if (authData) project = await projectModel.create(name, { _id: authData?.id });
 
                 res.status(200).send(project ? true : false);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
+});
+
+project_api.put('/api/project', jsonParser, async (req: express.Request, res: express.Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.body._id.toString().trim();
+    let name: string = req.body.name.trim();
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let is_update: boolean = false;
+                let taskModel: ProjectModel = new ProjectModel();
+                if (authData) is_update = await taskModel.edit(id, name);
+
+                res.status(200).send(is_update);
             } else {
                 res.sendStatus(401);
             }
@@ -72,7 +101,7 @@ project_api.get('/api/project/list', async (req: express.Request, res: express.R
 project_api.get('/api/project/:id', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.params.id;
+    let id: string = req.params.id.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {

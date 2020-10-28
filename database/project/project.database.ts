@@ -76,4 +76,25 @@ export class ProjectDatabase implements ProjectClass {
 
         return promise;
     }
+
+    public edit(id: string, name: string): Promise<boolean> {
+        let promise = new Promise<boolean>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbProjects).collection(this.collection).updateOne({ _id: new ObjectID(id) }, {
+                    '$set': {
+                        name: name
+                    }
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ? true : false);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
 }
