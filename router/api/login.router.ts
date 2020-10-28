@@ -11,8 +11,11 @@ const jsonParser = express.json();
 user_api.post('/api/login', jsonParser, async (req: express.Request, res: express.Response) => {
     if (!req.body) return res.sendStatus(400);
 
-    let email: string = req.body.email.trim();
-    let password: string = req.body.password.trim();
+    let email: string = req.body.email;
+    let password: string = req.body.password;
+
+    if (typeof email === 'string') email = email.trim();
+    if (typeof password === 'string') password = password.trim();
 
     if (email && password) {
         let userModel: UserModel = new UserModel();

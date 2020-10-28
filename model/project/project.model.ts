@@ -4,6 +4,7 @@ import { Project } from '../../interface/object/project.interface';
 import { User } from '../../interface/object/user.interface';
 
 import { ProjectClass } from '../../interface/class/project_class.interface';
+import { TaskModel } from '../task/task.model';
 
 export class ProjectModel implements ProjectClass {
     private collection: string = "projects";
@@ -28,5 +29,12 @@ export class ProjectModel implements ProjectClass {
 
     public async edit(id: string, name: string): Promise<boolean> {
         return await this.projectDatabase.edit(id, name);
+    }
+
+    public async delete(id: string): Promise<boolean> {
+        let taskModel: TaskModel = new TaskModel();
+        let is_delete: boolean = await taskModel.deleteProject(id.toString());
+        if (is_delete) return await this.projectDatabase.delete(id);
+        else return false;
     }
 }

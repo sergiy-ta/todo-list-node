@@ -9,4 +9,6 @@ export interface ProjectClass {
     getList(user: User): Promise<Project[]>;
 
     edit(id: string, name: string): Promise<boolean>;
+
+    delete(id: string): Promise<boolean>;
 }

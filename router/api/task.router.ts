@@ -15,11 +15,16 @@ user_api.post('/api/task', jsonParser, async (req: express.Request, res: express
 
     let token: string | undefined = req.headers.authorization;
 
-    let name: string = req.body.name.trim();
-    let description: string = req.body.description.trim();
-    let execution_date_time: string = req.body.execution_date_time.trim();
-    let project: string = req.body.project.trim();
-    let tag_list: string[] = req.body.tag_list.trim();
+    let name: string = req.body.name;
+    let description: string = req.body.description;
+    let execution_date_time: string = req.body.execution_date_time;
+    let project: string = req.body.project;
+    let tag_list: string[] = req.body.tag_list;
+
+    if (typeof name === 'string') name = name.trim();
+    if (typeof description === 'string') description = description.trim();
+    if (typeof execution_date_time === 'string') execution_date_time = execution_date_time.trim();
+    if (typeof project === 'string') project = project.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -47,12 +52,18 @@ user_api.put('/api/task', jsonParser, async (req: express.Request, res: express.
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.body._id.toString().trim();
-    let name: string = req.body.name.trim();
-    let description: string = req.body.description.trim();
-    let execution_date_time: string = req.body.execution_date_time.trim();
-    let project: string = req.body.project.trim();
-    let tag_list: string[] = req.body.tag_list.trim();
+    let id: string = req.body._id.toString();
+    let name: string = req.body.name;
+    let description: string = req.body.description;
+    let execution_date_time: string = req.body.execution_date_time;
+    let project: string = req.body.project;
+    let tag_list: string[] = req.body.tag_list;
+
+    if (typeof id === 'string') id = id.trim();
+    if (typeof name === 'string') name = name.trim();
+    if (typeof description === 'string') description = description.trim();
+    if (typeof execution_date_time === 'string') execution_date_time = execution_date_time.trim();
+    if (typeof project === 'string') project = project.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -81,7 +92,9 @@ user_api.get('/api/task/:id', jsonParser, async (req: express.Request, res: expr
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.params.id.trim();
+    let id: string = req.params.id;
+
+    if (typeof id === 'string') id = id.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -109,7 +122,9 @@ user_api.delete('/api/task/:id', jsonParser, async (req: express.Request, res: e
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.params.id.trim();
+    let id: string = req.params.id;
+
+    if (typeof id === 'string') id = id.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -168,7 +183,9 @@ user_api.get('/api/task/today/list', async (req: express.Request, res: express.R
 user_api.get('/api/task/:project/list', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
-    let project: string = req.params.project.trim();
+    let project: string = req.params.project;
+
+    if (typeof project === 'string') project = project.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -201,7 +218,9 @@ user_api.get('/api/task/:project/list', async (req: express.Request, res: expres
 user_api.get('/api/task/:id/complete', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.params.id.trim();
+    let id: string = req.params.id;
+
+    if (typeof id === 'string') id = id.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {

@@ -84,4 +84,8 @@ export class TaskModel implements TaskClass {
     public async delete(id: string): Promise<boolean> {
         return await this.taskDatabase.delete(id);
     }
+
+    public async deleteProject(project_id: string): Promise<boolean> {
+        return await this.taskDatabase.deleteProject(project_id);
+    }
 }

@@ -23,4 +23,6 @@ export interface TaskClass {
     edit(id: string, name: string, description: string, execution_date_time: string, tag_list: string[], project: string): Promise<boolean>;
 
     delete(id: string): Promise<boolean>;
+
+    deleteProject(project_id: string): Promise<boolean>;
 }

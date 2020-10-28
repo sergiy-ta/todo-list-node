@@ -254,4 +254,23 @@ export class TaskDatabase implements TaskClass {
 
         return promise;
     }
+
+    public deleteProject(project_id: string): Promise<boolean> {
+        let promise = new Promise<boolean>((resolve, rejects) => {
+            this.connect().then(client => {
+                client.db(database.dbTasks).collection(this.collection).deleteMany({
+                    project: { _id: project_id }
+                }, (error: any, data: any) => {
+                    if (!error) resolve(data ? true : false);
+                    else console.error(error);
+                });
+
+                client.close();
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+
+        return promise;
+    }
 }

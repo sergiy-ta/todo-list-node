@@ -15,7 +15,9 @@ project_api.post('/api/project', jsonParser, async (req: express.Request, res: e
 
     let token: string | undefined = req.headers.authorization;
 
-    let name: string = req.body.name.trim();
+    let name: string = req.body.name;
+
+    if (typeof name === 'string') name = name.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -43,8 +45,11 @@ project_api.put('/api/project', jsonParser, async (req: express.Request, res: ex
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.body._id.toString().trim();
-    let name: string = req.body.name.trim();
+    let id: string = req.body._id.toString();
+    let name: string = req.body.name;
+
+    if (typeof id === 'string') id = id.trim();
+    if (typeof name === 'string') name = name.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -53,8 +58,8 @@ project_api.put('/api/project', jsonParser, async (req: express.Request, res: ex
         authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
             if (access) {
                 let is_update: boolean = false;
-                let taskModel: ProjectModel = new ProjectModel();
-                if (authData) is_update = await taskModel.edit(id, name);
+                let projectModel: ProjectModel = new ProjectModel();
+                if (authData) is_update = await projectModel.edit(id, name);
 
                 res.status(200).send(is_update);
             } else {
@@ -101,7 +106,9 @@ project_api.get('/api/project/list', async (req: express.Request, res: express.R
 project_api.get('/api/project/:id', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.params.id.trim();
+    let id: string = req.params.id;
+
+    if (typeof id === 'string') id = id.trim();
 
     let authModel: AuthModel = new AuthModel();
     if (token) {
@@ -120,6 +127,36 @@ project_api.get('/api/project/:id', async (req: express.Request, res: express.Re
     } else {
         res.sendStatus(401);
     }
+});
+
+project_api.delete('/api/project/:id', jsonParser, async (req: express.Request, res: express.Response) => {
+    if (!req.body) return res.sendStatus(400);
+
+    let token: string | undefined = req.headers.authorization;
+
+    let id: string = req.params.id;
+
+    if (typeof id === 'string') id = id.trim();
+
+    let authModel: AuthModel = new AuthModel();
+    if (token) {
+        token = token.replace('Bearer ', '');
+
+        authModel.verifyToken(token, async (access: boolean, authData: { id: string } | undefined) => {
+            if (access) {
+                let is_delete: boolean = false;
+                let projectModel: ProjectModel = new ProjectModel();
+                if (authData) is_delete = await projectModel.delete(id);
+
+                res.status(200).send(is_delete);
+            } else {
+                res.sendStatus(401);
+            }
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
 });
 
 export default project_api;
