@@ -6,8 +6,9 @@ import { Project } from '../../interface/object/project.interface';
 import { User } from '../../interface/object/user.interface';
 
 import { ProjectClass } from '../../interface/class/project_class.interface';
+import { ProjectNotAccessEditClass } from '../../interface/class/project_not_access_edit_class.interface';
 
-export class ProjectDatabase implements ProjectClass {
+export class ProjectDatabase implements ProjectClass, ProjectNotAccessEditClass {
     private collection: string;
 
     constructor(collection: string = "projects") {

@@ -59,7 +59,7 @@ project_api.put('/api/project', jsonParser, async (req: express.Request, res: ex
             if (access) {
                 let is_update: boolean = false;
                 let projectModel: ProjectModel = new ProjectModel();
-                if (authData) is_update = await projectModel.edit(id, name);
+                if (authData) is_update = await projectModel.edit(authData.id, id, name);
 
                 res.status(200).send(is_update);
             } else {
@@ -146,7 +146,7 @@ project_api.delete('/api/project/:id', jsonParser, async (req: express.Request, 
             if (access) {
                 let is_delete: boolean = false;
                 let projectModel: ProjectModel = new ProjectModel();
-                if (authData) is_delete = await projectModel.delete(id);
+                if (authData) is_delete = await projectModel.delete(authData.id, id);
 
                 res.status(200).send(is_delete);
             } else {

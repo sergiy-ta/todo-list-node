@@ -4,8 +4,9 @@ import { Task } from '../../interface/object/task.interface';
 import { User } from '../../interface/object/user.interface';
 
 import { TaskClass } from '../../interface/class/task_class.interface';
+import { TaskAccessEditClass } from '../../interface/class/task_access_edit_class.interface';
 
-export class TaskModel implements TaskClass {
+export class TaskModel implements TaskClass, TaskAccessEditClass {
     private collection: string = "tasks";
     private taskDatabase: TaskDatabase;
 
@@ -77,12 +78,16 @@ export class TaskModel implements TaskClass {
         return await this.taskDatabase.complete(id);
     }
 
-    public async edit(id: string, name: string, description: string, execution_date_time: string, tag_list: string[], project: string): Promise<boolean> {
-        return await this.taskDatabase.edit(id, name, description, execution_date_time, tag_list, project);
+    public async edit(user_login_id: string, id: string, name: string, description: string, execution_date_time: string, tag_list: string[], project: string): Promise<boolean> {
+        let task_user = (await this.get(id))?.user;
+        if (user_login_id === task_user?._id.toString()) return await this.taskDatabase.edit(id, name, description, execution_date_time, tag_list, project);
+        else return false;
     }
 
-    public async delete(id: string): Promise<boolean> {
-        return await this.taskDatabase.delete(id);
+    public async delete(user_login_id: string, id: string): Promise<boolean> {
+        let task_user = (await this.get(id))?.user;
+        if (user_login_id === task_user?._id.toString()) return await this.taskDatabase.delete(id);
+        return false;
     }
 
     public async deleteProject(project_id: string): Promise<boolean> {

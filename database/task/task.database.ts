@@ -6,8 +6,9 @@ import { Task } from '../../interface/object/task.interface';
 import { User } from '../../interface/object/user.interface';
 
 import { TaskClass } from '../../interface/class/task_class.interface';
+import { TaskNotAccessEditClass } from '../../interface/class/task_not_access_edit_class.interface';
 
-export class TaskDatabase implements TaskClass {
+export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
     private collection: string;
 
     constructor(collection: string = "tasks") {

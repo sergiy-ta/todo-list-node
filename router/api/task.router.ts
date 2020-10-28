@@ -73,7 +73,7 @@ user_api.put('/api/task', jsonParser, async (req: express.Request, res: express.
             if (access) {
                 let is_update: boolean = false;
                 let taskModel: TaskModel = new TaskModel();
-                if (authData) is_update = await taskModel.edit(id, name, description, execution_date_time, tag_list, project);
+                if (authData) is_update = await taskModel.edit(authData.id, id, name, description, execution_date_time, tag_list, project);
 
                 res.status(200).send(is_update);
             } else {
@@ -134,7 +134,7 @@ user_api.delete('/api/task/:id', jsonParser, async (req: express.Request, res: e
             if (access) {
                 let is_delete: boolean = false;
                 let taskModel: TaskModel = new TaskModel();
-                if (authData) is_delete = await taskModel.delete(id);
+                if (authData) is_delete = await taskModel.delete(authData.id, id);
 
                 res.status(200).send(is_delete);
             } else {
