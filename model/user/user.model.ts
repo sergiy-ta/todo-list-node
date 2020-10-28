@@ -7,10 +7,12 @@ import { User } from '../../interface/object/user.interface';
 import { UserClass } from '../../interface/class/user_class.interface';
 
 export class UserModel implements UserClass {
-    collection: string = "users";
+    private collection: string = "users";
+    private userDatabase: UserDatabase;
 
     constructor(collection: string = "users") {
         this.collection = collection;
+        this.userDatabase = new UserDatabase(this.collection);
     }
 
     public async create(last_name: string, first_name: string, email: string, password: string): Promise<User | null> {
@@ -18,8 +20,7 @@ export class UserModel implements UserClass {
             let passwordHashModel: PasswordModel = new PasswordModel(password);
             let hashPassword: string = passwordHashModel.hashPassword();
 
-            let userDatabase: UserDatabase = new UserDatabase(this.collection);
-            return await userDatabase.create(last_name, first_name, email, hashPassword);
+            return await this.userDatabase.create(last_name, first_name, email, hashPassword);
         } else {
             return null;
         }
@@ -27,12 +28,10 @@ export class UserModel implements UserClass {
     }
 
     public async get(id: string): Promise<User | null> {
-        let userDatabase: UserDatabase = new UserDatabase(this.collection);
-        return await userDatabase.get(id);
+        return await this.userDatabase.get(id);
     }
 
     public async getEmail(email: string): Promise<User | null> {
-        let userDatabase: UserDatabase = new UserDatabase(this.collection);
-        return await userDatabase.getEmail(email);
+        return await this.userDatabase.getEmail(email);
     }
 }

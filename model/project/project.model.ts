@@ -6,24 +6,23 @@ import { User } from '../../interface/object/user.interface';
 import { ProjectClass } from '../../interface/class/project_class.interface';
 
 export class ProjectModel implements ProjectClass {
-    collection: string = "projects";
+    private collection: string = "projects";
+    private projectDatabase: ProjectDatabase;
 
     constructor(collection: string = "projects") {
         this.collection = collection;
+        this.projectDatabase = new ProjectDatabase(this.collection)
     }
 
     public async create(name: string, user: User | { _id: string }): Promise<Project | null> {
-        let projectDatabase: ProjectDatabase = new ProjectDatabase(this.collection);
-        return await projectDatabase.create(name, user);
+        return await this.projectDatabase.create(name, user);
     }
 
     public async get(id: string): Promise<Project | null> {
-        let projectDatabase: ProjectDatabase = new ProjectDatabase(this.collection);
-        return await projectDatabase.get(id);
+        return await this.projectDatabase.get(id);
     }
 
     public async getList(user: User): Promise<Project[]> {
-        let projectDatabase: ProjectDatabase = new ProjectDatabase(this.collection);
-        return await projectDatabase.getList(user);
+        return await this.projectDatabase.getList(user);
     }
 }
