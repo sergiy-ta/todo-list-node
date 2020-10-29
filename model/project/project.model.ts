@@ -25,7 +25,7 @@ export class ProjectModel implements ProjectClass, ProjectAccessEditClass {
         return await this.projectDatabase.get(id);
     }
 
-    public async getList(user: User): Promise<Project[]> {
+    public async getList(user: User | { _id: string }): Promise<Project[]> {
         return await this.projectDatabase.getList(user);
     }
 

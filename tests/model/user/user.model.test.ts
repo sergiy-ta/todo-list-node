@@ -17,13 +17,13 @@ describe('Test model user', () => {
         const userModel: UserModel = new UserModel("users-test");
         const user_create: User | null = await userModel.create(last_name, first_name, email, password);
         if (user_create) {
+            id = user_create._id.toHexString();
             expect(user_create.last_name).to.eql(last_name);
             expect(user_create.first_name).to.eql(first_name);
             expect(user_create.email).to.eql(email);
             expect(user_create.password).to.not.eql(password);
-            id = user_create._id.toHexString();
         } else {
-            expect(user_create).to.not.eql(null);
+            expect(user_create).to.eql(null);
         } 
     });
 
@@ -43,7 +43,7 @@ describe('Test model user', () => {
             expect(user_create.email).to.eql(email);
             expect(user_create.password).to.not.eql(password);
         } else {
-            expect(user_create).to.not.eql(null);
+            expect(user_create).to.eql(null);
         }
     });
 

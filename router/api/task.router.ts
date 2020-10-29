@@ -52,12 +52,14 @@ user_api.put('/api/task', jsonParser, async (req: express.Request, res: express.
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.body._id.toString();
+    let id: string = req.body._id;
     let name: string = req.body.name;
     let description: string = req.body.description;
     let execution_date_time: string = req.body.execution_date_time;
     let project: string = req.body.project;
     let tag_list: string[] = req.body.tag_list;
+
+    if (id) id = id.toString();
 
     if (typeof id === 'string') id = id.trim();
     if (typeof name === 'string') name = name.trim();

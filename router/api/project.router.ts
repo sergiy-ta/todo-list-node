@@ -45,8 +45,10 @@ project_api.put('/api/project', jsonParser, async (req: express.Request, res: ex
 
     let token: string | undefined = req.headers.authorization;
 
-    let id: string = req.body._id.toString();
+    let id: string = req.body._id;
     let name: string = req.body.name;
+
+    if (id) id = id.toString();
 
     if (typeof id === 'string') id = id.trim();
     if (typeof name === 'string') name = name.trim();
@@ -103,6 +105,10 @@ project_api.get('/api/project/list', async (req: express.Request, res: express.R
     }
 });
 
+project_api.delete('/api/project/list', async (req: express.Request, res: express.Response) => {
+    res.sendStatus(404);
+});
+
 project_api.get('/api/project/:id', async (req: express.Request, res: express.Response) => {
     let token: string | undefined = req.headers.authorization;
 
@@ -129,7 +135,7 @@ project_api.get('/api/project/:id', async (req: express.Request, res: express.Re
     }
 });
 
-project_api.delete('/api/project/:id', jsonParser, async (req: express.Request, res: express.Response) => {
+project_api.delete('/api/project/:id', async (req: express.Request, res: express.Response) => {
     if (!req.body) return res.sendStatus(400);
 
     let token: string | undefined = req.headers.authorization;

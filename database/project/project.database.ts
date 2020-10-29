@@ -24,7 +24,7 @@ export class ProjectDatabase implements ProjectClass, ProjectNotAccessEditClass 
             this.connect().then(client => {
                 client.db(database.dbProjects).collection(this.collection).insertOne({
                     name: name,
-                    user: { _id: new ObjectID(user._id) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     date_of_creation: new Date(new Date().toISOString())
                 }, (error: any, data: any) => {
                     if (!error) resolve(data['ops'][0] ?? null);
@@ -59,11 +59,11 @@ export class ProjectDatabase implements ProjectClass, ProjectNotAccessEditClass 
         return promise;
     }
 
-    public getList(user: User): Promise<Project[]> {
+    public getList(user: User | { _id: string }): Promise<Project[]> {
         let promise = new Promise<Project[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbProjects).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) }
+                    user: { _id: new ObjectID(user._id.toString()) }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
                     else console.error(error);

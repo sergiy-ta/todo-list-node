@@ -31,10 +31,10 @@ user_api.post('/api/user', jsonParser, async (req: express.Request, res: express
 
             res.status(200).send({token});
         } else {
-            res.status(401).send('');
+            res.status(200).send('');
         }
     } else {
-        res.status(401).send('');
+        res.status(200).send('');
     }
 });
 

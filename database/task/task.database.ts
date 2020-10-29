@@ -64,11 +64,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getList(user: User): Promise<Task[]> {
+    public getList(user: User | { _id: string }): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) }
+                    user: { _id: new ObjectID(user._id.toString()) }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
                     else console.error(error);
@@ -84,11 +84,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public getProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     project: { _id: project }
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
@@ -105,11 +105,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getIsCompleteList(user: User): Promise<Task[]> {
+    public getIsCompleteList(user: User | { _id: string }): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     is_complete: true
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? []);
@@ -126,11 +126,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getIsCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public getIsCompleteProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     is_complete: true,
                     project: { _id: project }
                 }).toArray((error: any, data: any) => {
@@ -148,11 +148,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getIsNotCompleteList(user: User): Promise<Task[]> {
+    public getIsNotCompleteList(user: User | { _id: string }): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     is_complete: false
                 }).toArray((error: any, data: any) => {
                     if (!error) resolve(data ?? null);
@@ -169,11 +169,11 @@ export class TaskDatabase implements TaskClass, TaskNotAccessEditClass {
         return promise;
     }
 
-    public getIsNotCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public getIsNotCompleteProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         let promise = new Promise<Task[]>((resolve, rejects) => {
             this.connect().then(client => {
                 client.db(database.dbTasks).collection(this.collection).find({
-                    user: { _id: new ObjectID(user._id.toHexString()) },
+                    user: { _id: new ObjectID(user._id.toString()) },
                     is_complete: false,
                     project: { _id: project }
                 }).toArray((error: any, data: any) => {

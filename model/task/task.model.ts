@@ -23,15 +23,15 @@ export class TaskModel implements TaskClass, TaskAccessEditClass {
         return await this.taskDatabase.get(id);
     }
 
-    public async getList(user: User): Promise<Task[]> {
+    public async getList(user: User | { _id: string }): Promise<Task[]> {
         return await this.taskDatabase.getList(user);
     }
 
-    public async getProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public async getProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         return await this.taskDatabase.getProjectList(user, project);
     }
 
-    public async getListToday(user: User): Promise<Task[]> {
+    public async getListToday(user: User | { _id: string }): Promise<Task[]> {
         let task_list: Task[] = [];
         (await this.taskDatabase.getList(user)).map((task: Task) => {
             let data_now = new Date(Date.now());
@@ -40,15 +40,15 @@ export class TaskModel implements TaskClass, TaskAccessEditClass {
         return await task_list;
     }
 
-    public async getIsCompleteList(user: User): Promise<Task[]> {
+    public async getIsCompleteList(user: User | { _id: string }): Promise<Task[]> {
         return await this.taskDatabase.getIsCompleteList(user);
     }
 
-    public async getIsCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public async getIsCompleteProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         return await this.taskDatabase.getIsCompleteProjectList(user, project);
     }
 
-    public async getIsCompleteListToday(user: User): Promise<Task[]> {
+    public async getIsCompleteListToday(user: User | { _id: string }): Promise<Task[]> {
         let task_list: Task[] = [];
         (await this.taskDatabase.getIsCompleteList(user)).map((task: Task) => {
             let data_now = new Date(Date.now());
@@ -57,15 +57,15 @@ export class TaskModel implements TaskClass, TaskAccessEditClass {
         return await task_list;
     }
 
-    public async getIsNotCompleteList(user: User): Promise<Task[]> {
+    public async getIsNotCompleteList(user: User | { _id: string }): Promise<Task[]> {
         return await this.taskDatabase.getIsNotCompleteList(user);
     }
 
-    public async getIsNotCompleteProjectList(user: User, project: string = 'inbox'): Promise<Task[]> {
+    public async getIsNotCompleteProjectList(user: User | { _id: string }, project: string = 'inbox'): Promise<Task[]> {
         return await this.taskDatabase.getIsNotCompleteProjectList(user, project);
     }
 
-    public async getIsNotCompleteListToday(user: User): Promise<Task[]> {
+    public async getIsNotCompleteListToday(user: User | { _id: string }): Promise<Task[]> {
         let task_list: Task[] = [];
         (await this.taskDatabase.getIsNotCompleteList(user)).map((task: Task) => {
             let data_now = new Date(Date.now());
