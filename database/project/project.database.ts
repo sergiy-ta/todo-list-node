@@ -118,3 +118,14 @@ export class ProjectDatabase implements ProjectClass, ProjectNotAccessEditClass 
         return promise;
     }
 }
+
+abstract class Database<T> {
+    private object;
+
+    constructor(object) {
+        this.object = object
+    }
+    protected create(...args): Promise<T> {
+        return null;
+    }
+}

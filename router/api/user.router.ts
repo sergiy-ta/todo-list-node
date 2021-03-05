@@ -16,6 +16,8 @@ user_api.post('/api/user', jsonParser, async (req: express.Request, res: express
     let email: string = req.body.email;
     let password: string = req.body.password;
 
+    
+
     if (typeof last_name === 'string') last_name = last_name.trim();
     if (typeof first_name === 'string') first_name = first_name.trim();
     if (typeof email === 'string') email = email.trim();
@@ -23,7 +25,7 @@ user_api.post('/api/user', jsonParser, async (req: express.Request, res: express
 
     if (last_name && first_name && email && password) {
         let userModel: UserModel = new UserModel();
-        let user: User | null = await userModel.create(last_name, first_name, email, password);
+        let user: User | null = await userModel.create(first_name, last_name, email, password);
 
         if (user) {
             let authModel: AuthModel = new AuthModel();
